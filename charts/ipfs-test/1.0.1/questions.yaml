@@ -133,7 +133,7 @@ questions:
             type: dict
             attrs:
               - variable: datasetName
-                label: "IPFS Staging Volume Dataset Name"
+                label: "IPFS Staging Volume Name"
                 schema:
                   type: string
                   hidden: true
