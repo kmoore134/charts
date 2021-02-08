@@ -1,0 +1,18 @@
+apiVersion: v1
+description: The First Scalable Decentralized Storage System
+name: btfs
+version: 1.0.1
+appVersion: master
+keywords:
+- storage
+- p2p
+home: https://btfs.io
+icon: https://miro.medium.com/max/1200/1*KUuBpPnk53gmH6GZxSDdNQ.jpeg
+sources:
+- https://github.com/TRON-US/go-btfs
+- https://hub.docker.com/repository/docker/ixsystems/btfs-truenas-docker 
+upstream_version: 1.5.0
+dependencies:
+  - name: common
+    repository: file://../../../library/common/2101.0.0
+    version: 2101.0.0
