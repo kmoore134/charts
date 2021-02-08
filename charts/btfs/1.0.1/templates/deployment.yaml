@@ -31,6 +31,10 @@ spec:
           {{ include "common.containers.imageConfig" .Values.image | nindent 10 }}
           command: ['/usr/local/bin/btfs', 'config', '--json', 'Addresses.Swarm', "[\"/ip4/0.0.0.0/tcp/9401\",\"/ip4/0.0.0.0/tcp/9401/quic\"]" ]
           {{ include "common.storage.allContainerVolumeMounts" .Values | nindent 10 }}
+        - name: init-storage-host
+          {{ include "common.containers.imageConfig" .Values.image | nindent 10 }}
+          command: ['/usr/local/bin/btfs', 'config', 'profile', 'apply', 'storage-host' ]
+          {{ include "common.storage.allContainerVolumeMounts" .Values | nindent 10 }}
         - name: init-access-origin
           {{ include "common.containers.imageConfig" .Values.image | nindent 10 }}
           command: ['/usr/local/bin/btfs', 'config', '--json', 'API.HTTPHeaders.Access-Control-Allow-Origin', "[\"*\"]" ]
