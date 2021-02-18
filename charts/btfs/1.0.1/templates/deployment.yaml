@@ -21,7 +21,7 @@ spec:
           {{ include "common.storage.allContainerVolumeMounts" .Values | nindent 10 }}
         - name: init-api
           {{ include "common.containers.imageConfig" .Values.image | nindent 10 }}
-          command: ['/usr/local/bin/btfs', 'config', 'Addresses.API', "/ip4/0.0.0.0/tcp/9501"]
+          command: ['/usr/local/bin/btfs', 'config', 'Addresses.API', "/ip4/127.0.0.1/tcp/5001"]
           {{ include "common.storage.allContainerVolumeMounts" .Values | nindent 10 }}
         - name: init-gateway
           {{ include "common.containers.imageConfig" .Values.image | nindent 10 }}
