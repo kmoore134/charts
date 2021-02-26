@@ -1,3 +1,5 @@
+![format_validation](https://github.com/kmoore134/charts/workflows/format_validation/badge.svg)
+
 # iX Official Catalog
 
 A curated collection of TrueNAS SCALE enhanced Helm charts.
