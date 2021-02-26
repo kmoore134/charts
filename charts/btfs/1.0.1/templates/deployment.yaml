@@ -35,6 +35,14 @@ spec:
           {{ include "common.containers.imageConfig" .Values.image | nindent 10 }}
           command: ['/usr/local/bin/btfs', 'config', 'profile', 'apply', 'storage-host' ]
           {{ include "common.storage.allContainerVolumeMounts" .Values | nindent 10 }}
+        - name: init-access-origin
+          {{ include "common.containers.imageConfig" .Values.image | nindent 10 }}
+          command: ['/usr/local/bin/btfs', 'config', '--json', 'API.HTTPHeaders.Access-Control-Allow-Origin', "[\"*\"]" ]
+          {{ include "common.storage.allContainerVolumeMounts" .Values | nindent 10 }}
+        - name: init-access-methods
+          {{ include "common.containers.imageConfig" .Values.image | nindent 10 }}
+          command: ['/usr/local/bin/btfs', 'config', '--json', 'API.HTTPHeaders.Access-Control-Allow-Methods', "[\"PUT\",\"POST\"]" ]
+          {{ include "common.storage.allContainerVolumeMounts" .Values | nindent 10 }}
         - name: init-chown
           {{ include "common.containers.imageConfig" .Values.image | nindent 10 }}
           command: ['chown', '1000:100', '/data/btfs/config']
