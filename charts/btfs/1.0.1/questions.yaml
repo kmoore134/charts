@@ -1,0 +1,199 @@
+groups:
+  - name: "Container Images"
+    description: "Image to be used for container"
+  - name: "Workload Configuration"
+    description: "Configure Storage for BTFS"
+  - name: "Storage"
+    description: "Configure Storage for BTFS"
+  - name: "BTFS Configuration"
+    description: "Configure Storage for BTFS"
+
+portals:
+  web_portal:
+    protocols:
+      - "http"
+    host:
+      - "$node_ip"
+    ports:
+      - "$variable-service.apiPort"
+    path: "/hostui"
+
+questions:
+  # Image related
+  - variable: image
+    description: "Docker Image Details"
+    label: "Docker Image"
+    group: "Container Images"
+    schema:
+      type: dict
+      required: true
+      attrs:
+        - variable: repository
+          description: "Docker image repository"
+          label: "Image repository"
+          schema:
+            type: string
+            default: "ixsystems/btfs-truenas-docker"
+            required: true
+        - variable: tag
+          description: "Tag to use for specified image"
+          label: "Image Tag"
+          schema:
+            type: string
+            default: "v1.5.0"
+        - variable: pullPolicy
+          description: "Docker Image Pull Policy"
+          label: "Image Pull Policy"
+          schema:
+            type: string
+            default: "IfNotPresent"
+            enum:
+              - value: "IfNotPresent"
+                description: "Only pull image if not present on host"
+              - value: "Always"
+                description: "Always pull image even if present on host"
+              - value: "Never"
+                description: "Never pull image even if it's not present on host"
+
+  - variable: updateStrategy
+    label: "BTFS update strategy"
+    group: "Workload Configuration"
+    schema:
+      type: string
+      default: "Recreate"
+      enum:
+        - value: "RollingUpdate"
+          description: "Create new pods and then kill old ones"
+        - value: "Recreate"
+          description: "Kill existing pods before creating new ones"
+
+  - variable: environmentVariables
+    label: "BTFS image environment"
+    group: "BTFS Configuration"
+    schema:
+      type: list
+      default: []
+      items:
+        - variable: environmentVariable
+          label: "Environment Variable"
+          schema:
+            type: dict
+            attrs:
+              - variable: name
+                label: "Name"
+                schema:
+                  type: string
+              - variable: value
+                label: "Value"
+                schema:
+                  type: string
+
+  - variable: service
+    description: "BTFS Service Configuration"
+    label: "BTFS Service Configuration"
+    group: "BTFS Configuration"
+    schema:
+      type: dict
+      required: true
+      attrs:
+        - variable: swarmPort
+          label: "Swarm Port to use for BTFS (Public)"
+          schema:
+            type: int
+            min: 9000
+            max: 65535
+            default: 9401
+            required: true
+        - variable: apiPort
+          label: "API Port to use for BTFS (local)"
+          schema:
+            type: int
+            min: 9000
+            max: 65535
+            default: 9501
+            required: true
+        - variable: gatewayPort
+          label: "Gateway Port to use for BTFS (local)"
+          schema:
+            type: int
+            min: 9000
+            max: 65535
+            default: 9880
+            required: true
+
+  - variable: appVolumeMounts
+    label: "BTFS Storage"
+    group: "Storage"
+    schema:
+      type: dict
+      attrs:
+        - variable: staging
+          label: "Staging Volume"
+          schema:
+            type: dict
+            attrs:
+              - variable: datasetName
+                label: "BTFS Staging Volume Name"
+                schema:
+                  type: string
+                  hidden: true
+                  $ref:
+                    - "normalize/ixVolume"
+                  show_if: [["hostPathEnabled", "=", false]]
+                  default: "ix-btfs-staging"
+                  editable: false
+              - variable: mountPath
+                label: "BTFS Staging Mount Path"
+                description: "Path where the volume will be mounted inside the pod"
+                schema:
+                  type: path
+                  hidden: true
+                  editable: false
+                  default: "/export"
+              - variable: hostPathEnabled
+                label: "Enable Host Path for BTFS Staging Volume"
+                schema:
+                  type: boolean
+                  default: false
+                  show_subquestions_if: true
+                  subquestions:
+                    - variable: hostPath
+                      label: "Host Path for BTFS Staging Volume"
+                      schema:
+                        type: hostpath
+                        required: true
+        - variable: data
+          label: "Data Volume"
+          schema:
+            type: dict
+            attrs:
+              - variable: datasetName
+                label: "BTFS Data Volume Name"
+                schema:
+                  type: string
+                  hidden: true
+                  $ref:
+                    - "normalize/ixVolume"
+                  show_if: [["hostPathEnabled", "=", false]]
+                  default: "ix-btfs-data"
+                  editable: false
+              - variable: mountPath
+                label: "BTFS Data Mount Path"
+                description: "Path where the volume will be mounted inside the pod"
+                schema:
+                  type: path
+                  hidden: true
+                  editable: false
+                  default: "/data/btfs"
+              - variable: hostPathEnabled
+                label: "Enable Host Path for BTFS Data Volume"
+                schema:
+                  type: boolean
+                  default: false
+                  show_subquestions_if: true
+                  subquestions:
+                    - variable: hostPath
+                      label: "Host Path for BTFS Data Volume"
+                      schema:
+                        type: hostpath
+                        required: true
