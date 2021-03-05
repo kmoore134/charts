@@ -33,14 +33,14 @@ questions:
           label: "Image repository"
           schema:
             type: string
-            default: "ixsystems/btfs-truenas-docker"
+            default: "ghcr.io/tron-us/go-btfs"
             required: true
         - variable: tag
           description: "Tag to use for specified image"
           label: "Image Tag"
           schema:
             type: string
-            default: "v1.5.0"
+            default: "v1.5.1-release"
         - variable: pullPolicy
           description: "Docker Image Pull Policy"
           label: "Image Pull Policy"

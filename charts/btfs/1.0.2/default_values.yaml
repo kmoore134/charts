@@ -1,8 +1,8 @@
 ## Set default image, imageTag, and imagePullPolicy. mode is used to indicate the
 ##
 image:
-  repository: ixsystems/btfs-truenas-docker
-  tag: v1.5.0
+  repository: ghcr.io/tron-us/go-btfs
+  tag: v1.5.1-release
   pullPolicy: IfNotPresent
 
 ## Additional arguments to pass to ipfs binary
@@ -13,7 +13,7 @@ updateStrategy: Recreate
 service:
   swarmPort: 9401
   apiPort: 9501
-  gatewayPort: 9080
+  gatewayPort: 9880
 
 environment:
 

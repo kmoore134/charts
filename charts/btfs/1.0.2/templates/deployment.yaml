@@ -21,11 +21,11 @@ spec:
           {{ include "common.storage.allContainerVolumeMounts" .Values | nindent 10 }}
         - name: init-api
           {{ include "common.containers.imageConfig" .Values.image | nindent 10 }}
-          command: ['/usr/local/bin/btfs', 'config', 'Addresses.API', "/ip4/127.0.0.1/tcp/5001"]
+          command: ['/usr/local/bin/btfs', 'config', 'Addresses.API', "/ip4/0.0.0.0/tcp/9501"]
           {{ include "common.storage.allContainerVolumeMounts" .Values | nindent 10 }}
         - name: init-gateway
           {{ include "common.containers.imageConfig" .Values.image | nindent 10 }}
-          command: ['/usr/local/bin/btfs', 'config', 'Addresses.Gateway', "/ip4/0.0.0.0/tcp/9080"]
+          command: ['/usr/local/bin/btfs', 'config', 'Addresses.Gateway', "/ip4/0.0.0.0/tcp/9880"]
           {{ include "common.storage.allContainerVolumeMounts" .Values | nindent 10 }}
         - name: init-swarm
           {{ include "common.containers.imageConfig" .Values.image | nindent 10 }}
@@ -49,6 +49,11 @@ spec:
           {{ include "common.storage.allContainerVolumeMounts" .Values | nindent 10 }}
       containers:
         - name: {{ .Chart.Name }}
+          env:
+            - name: ENABLE_WALLET_REMOTE
+              value: "true"
+            - name: DISABLED_NO_REMOTE
+              value: "false"
           {{ include "common.containers.imageConfig" .Values.image | nindent 10 }}
           {{ include "common.storage.allContainerVolumeMounts" .Values | nindent 10 }}
           ports:
